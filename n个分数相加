@@ -1,0 +1,41 @@
+#include<stdio.h>    //调用标准输入输出头文件
+long long gys(long long j,long long k);    //最大公因数函数声明
+int main()    //主函数声明
+{
+    long long n,a=1,b=1,c,d,x,y,z;    //n为分数个数，a、b为计算过程中分子分母，c、d为输入分子分母，x、y、z为输出中整数部分及分数部分分子分母
+    scanf("%lld",&n);    //输入分数个数n
+    for(;n--;)    //重复循环n次
+    {
+        scanf("%lld/%lld",&c,&d);    //输入各项分子分母
+        b*=d;    //与上一项通分后分母
+        a=a*d+c*b/d;    //与上一项通分加和后分子
+        int i=gys(a,b);    //求通分加和后分子分母最大公因数
+        a/=i;    //对分子进行约分
+        b/=i;    //对分母进行约分
+    }
+    a-=b;    //去掉加和中为通分引入的初始值1/1
+    x=a/b;    //求加和结果整数部分
+    y=a%b;    //求加和结果分数部分分子
+    z=b;    //求加和结果分数部分分母
+    if(x&&y)    //加和结果整数部分与分数部分均不为零
+        printf("%lld %lld/%lld",x,y,z);    //按格式输出加和结果整数部分与分数部分
+    else if(!x&&y)    //加和结果整数部分为零且分数部分不为零
+        printf("%lld/%lld",y,z);    //仅输出加和结果分数部分
+    else if(x&&!y)    //加和结果整数部分不为零且分数部分为零
+        printf("%lld",x);    //仅输出加和结果整数部分
+    else if(!x&&!y)    //加和结果整数部分与分数部分均为零
+        printf("0");    //输出加和结果零
+    else    //其他情况
+        return 0;    //结束程序
+    return 0;    //结束程序
+}
+long long gys(long long m,long long n)    //最大公因数函数头部
+{
+    long long a;    //引入最大公因数（待求）
+    for(a=m>n?m:n;a--;)    //递减循环较大数次
+        if(m%a==0&&n%a==0)    //满足同时是两参数的因数
+        {
+            return a;    //将最大公因数返回到主函数
+            break;    //结束循环
+        }
+}
