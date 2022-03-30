@@ -1,0 +1,33 @@
+#include<stdio.h>
+int main()
+{
+    char c;
+    int n,j,k,flag=1;
+    scanf("%c %d",&c,&n);
+    char a[n][n];
+    getchar();
+    for(j=0;j<n;j++)
+    {
+        for(k=0;k<n;k++)
+            scanf("%c",&a[j][k]);
+        getchar();
+    }
+    for(j=0;j<n;j++)
+        for(k=0;k<n;k++)
+            if(a[j][k]!=a[n-j-1][n-k-1])
+                flag=0;
+    if(flag)
+        printf("bu yong dao le\n");
+    for(j=0;j<n;j++)
+    {
+        for(k=0;k<n;k++)
+        {
+            if(a[n-j-1][n-k-1]!=' ')
+                printf("%c",c);
+            else
+                printf(" ");
+        }
+        putchar('\n');
+    }
+    return 0;
+}
