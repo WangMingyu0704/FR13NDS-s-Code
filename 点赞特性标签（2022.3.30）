@@ -1,0 +1,25 @@
+#include<stdio.h>
+int main()
+{
+    int n,i,tag,favourite=0,num;
+    int a[1005]={0};
+    scanf("%d",&n);
+    for(;n--;)
+    {
+     scanf("%d",&num);
+        for(;num--;)
+        {
+         scanf("%d",&tag);
+            a[tag]++; 
+        }
+    }
+    for(i=0;i<=1000;i++)
+    {
+        if(a[favourite]<=a[i])
+        {
+            favourite=i;
+        }
+    }
+    printf("%d %d",favourite,a[favourite]);
+    return 0;
+}
