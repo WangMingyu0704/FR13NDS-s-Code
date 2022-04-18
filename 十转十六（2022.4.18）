@@ -1,0 +1,26 @@
+void f( long int x, char *p )
+{
+    char a[10];
+    if(x==0)
+    {
+        p[0]='0',p[1]='\0';
+        return;
+    }
+    int i=-1,j=0;
+    char s[]="0123456789ABCDEF";
+    if(x<0)
+    {
+        p[0]='-',j++,x=-x;
+    }
+    for(;x!=0;x/=16)
+    {
+        i++;
+        a[i]=s[x%16];
+    }
+    for(;i>=0;i--,j++)
+    {
+        p[j]=a[i];
+    }
+    p[j]='\0';
+    return;
+}
