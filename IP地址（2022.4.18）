@@ -1,0 +1,40 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+void change(char *q,char *p);
+int atoi(const char nptr[]);
+char *itoa(int value,char *str,int base);
+int main()
+{
+    int i,j;
+    char a[9],b[9],c[9],d[9],e[4],f[4],g[4],h[4],n[33];
+    cin.getline(n,33);
+    for(i=0,j=0;i<8;i++,j++)
+    {
+        a[j]=n[i];
+    }
+    for(i=8,j=0;i<16;i++,j++)
+    {
+        b[j]=n[i];
+    }
+    for(i=16,j=0;i<24;i++,j++)
+    {
+        c[j]=n[i];
+    }
+    for(i=24,j=0;i<32;i++,j++)
+    {
+        d[j]=n[i];
+    }
+    change(a,e);
+    change(b,f);
+    change(c,g);
+    change(d,h);
+    printf("%s.%s.%s.%s",e,f,g,h);
+    return 0;
+}
+void change(char *q,char *p)
+{
+    int a=atoi(q);
+    itoa(a,p,10);
+    return;
+}
