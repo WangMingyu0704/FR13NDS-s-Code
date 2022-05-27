@@ -1,0 +1,48 @@
+#include<iostream>
+#include<cstdlib>
+#include<cstring>
+using namespace std;
+typedef struct NODE
+{
+    int Data;
+    struct NODE* Next;
+}Node; 
+int main()
+{
+    int Time;
+    scanf("%d",&Time);
+    for(;Time--;)
+    {
+        int n;
+        scanf("%d",&n);
+        Node* Head = (Node*)malloc(sizeof(Node));
+        Node* Tail = (Node*)malloc(sizeof(Node));
+        Head->Next = NULL;
+        Tail = Head;
+        for(int i = 0;i < n;i++)
+        {
+            Node* p = (Node*)malloc(sizeof(Node));
+            scanf("%d",&p->Data);
+            Tail->Next = p;
+            Tail = p;
+        }
+        Node* q;
+        q = Head->Next;
+        for(int i = 0;i < n;i++)
+        {
+            if(i%2)
+            {
+                printf("%d",q->Data);
+            }
+            if(i%2&&i<n-2)
+            {
+                printf(" ");
+            }
+            q = q->Next;
+        }
+        free(Head);
+        free(Tail);
+        printf("\n");
+    }
+    return 0;
+}
