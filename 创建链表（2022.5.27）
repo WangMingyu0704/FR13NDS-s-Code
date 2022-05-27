@@ -1,0 +1,42 @@
+#include<iostream>
+#include<cstdlib>
+#include<cstring>
+using namespace std;
+typedef struct STUDENT
+{
+    char Name[100];
+    double Mark;
+}Student;
+typedef struct NODE
+{
+    Student Stu;
+    struct NODE* Next;
+}Node;
+int main()
+{
+    Node* Head = (Node*)malloc(sizeof(Node));
+    Node* Tail = (Node*)malloc(sizeof(Node));
+    Head->Next = NULL;
+    Tail = Head;
+    for(;;)
+    {
+        Node* p = (Node*)malloc(sizeof(Node));
+        scanf("%s %lf",p->Stu.Name,&p->Stu.Mark);
+        Tail->Next = p;
+        Tail = p;
+        if(p->Stu.Mark==-1)
+        {
+            break;
+        }
+    }
+    Node* q;
+    q = Head->Next;
+    for(;q->Next;)
+    {
+        printf("%s %.1f\n",q->Stu.Name,q->Stu.Mark);
+        q = q->Next;
+    }
+    free(Head);
+    free(Tail);
+    return 0;
+}
