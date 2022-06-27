@@ -1,0 +1,44 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+bool isNum(string a)
+{
+    for(int i = 0;i<a.length();i++)
+    {
+        if(a[i]<48||a[i]>57)
+            return false;
+    }
+    if(a.length()<1||stoi(a)<1||stoi(a)>1000)
+        return false;
+    return true;
+}
+int main()
+{
+    string s;
+ getline(cin,s);
+ int i;
+ for(i = 0;i<s.length();i++)
+    {
+  if(s[i]==' ')
+   break;
+ }
+ string a = s.substr(0,i);
+ string b = s.substr(i+1);
+    if(isNum(a)&&isNum(b))
+    {
+        printf("%d + %d = %d",stoi(a),stoi(b),stoi(a)+stoi(b));
+        return 0;
+    }
+    else if(isNum(a)&&!isNum(b))
+    {
+        printf("%d + ? = ?",stoi(a));
+        return 0;
+    }
+    else if(!isNum(a)&&isNum(b))
+    {
+        printf("? + %d = ?",stoi(b));
+        return 0;
+    }
+    printf("? + ? = ?");
+    return 0;
+}
