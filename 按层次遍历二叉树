@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+#include<queue>
+using namespace std;
+
+typedef struct BinTree{
+    char data;
+    struct BinTree* LChild;
+    struct BinTree* RChild;
+}BT;
+
+BT* CreateBinTree(){
+    BT* root = (BT*)malloc(sizeof(BT));
+    char c;
+    scanf("%c", &c);
+    if(c == '#'){
+        root = NULL;
+        return root;
+    }
+    root -> data = c;
+    root -> LChild = CreateBinTree();
+    root -> RChild = CreateBinTree();
+    return root;
+}
+
+int main(){
+    BT* tree = CreateBinTree();
+    queue<BT*> level;
+    level.push(tree);
+    for(; level.size(); ){
+        BT* temp = level.front();
+        level.pop();
+        printf("%c", temp -> data);
+        if(temp -> LChild){
+            level.push(temp -> LChild);
+        }
+        if(temp -> RChild){
+            level.push(temp -> RChild);
+        }
+    }
+}
