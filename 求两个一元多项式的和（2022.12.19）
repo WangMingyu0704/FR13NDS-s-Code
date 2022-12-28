@@ -1,0 +1,99 @@
+#include<iostream>
+#include<malloc.h>
+using namespace std;
+
+/*结构体定义*/
+typedef struct NODE{
+    int Coef;
+    int Exp;
+    struct NODE* next;
+} Node, *PNode;
+/*结构体定义*/
+
+/*主函数*/
+int main(){
+    /*写入链表*/
+    PNode mult1, mult2, p, q;    //定义链表以存储多项式（mult1、mult2为链表头部，不移动）
+    mult1 = (PNode)malloc(sizeof(Node));
+    mult1 -> next = NULL;
+    mult2 = (PNode)malloc(sizeof(Node));
+    mult2 -> next = NULL;
+    int num1, num2, coef, exp;
+    p = mult1;    //写入首行多项式
+    scanf("%d", &num1);
+    for(int i = 0; i < num1; i++){
+        PNode q = (PNode)malloc(sizeof(Node));
+        scanf("%d %d", &coef, &exp);
+        q -> Coef = coef;
+        q -> Exp = exp;
+        q -> next = NULL;
+        p -> next = q;
+        p = q;
+    }
+    p = mult2;    //写入次行多项式
+    scanf("%d", &num2);
+    for(int i = 0; i < num2; i++){
+        PNode q = (PNode)malloc(sizeof(Node));
+        scanf("%d %d", &coef, &exp);
+        q -> Coef = coef;
+        q -> Exp = exp;
+        q -> next = NULL;
+        p -> next = q;
+        p = q;
+    }
+    p -> next = NULL;
+    /*写入链表*/
+    
+    /*链表加和*/
+    PNode mult3 = (PNode)malloc(sizeof(Node));    //定义链表以存储多项式（mult3为链表头部，不移动）
+    p = mult1 -> next;
+    q = mult2 -> next;
+    PNode r = mult3;
+    for(; p && q; ){    //链表1、链表2均有剩余结点
+        if(p -> Exp > q -> Exp){    //链表1首项指数大于链表2首项指数
+            r -> next = p;
+            p = p -> next;
+            r = r -> next;
+        }
+        else if(p -> Exp < q -> Exp){    //链表1首项指数小于链表2首项指数
+            r -> next = q;
+            q = q -> next;
+            r = r -> next;
+        }
+        else{    //链表1首项指数等于链表2首项指数
+            int sum = p -> Coef + q -> Coef;
+            if(sum){    //两链表首项系数之和不为零
+                PNode s = (PNode)malloc(sizeof(Node));
+                s -> Coef = sum;
+                s -> Exp = p -> Exp;
+                r -> next = s;
+                r = s;
+            }
+            p = p -> next;
+            q = q -> next;
+        }
+    }
+    if(p){    //链表1有剩余结点
+        r -> next = p;
+    }
+    else{    //链表2有剩余结点或两链表均加和结束
+        r -> next = q;
+    }
+    /*链表加和*/
+    
+    /*输出链表*/
+    if(!mult3 -> next){    //加和结果为零多项式（特殊情况）
+        printf("0 0");
+        return 0;
+    }
+    PNode P = mult3 -> next;
+    for(; P -> next; P = P -> next){    //输出除最后一个以外非零项
+        printf("%d %d ", P -> Coef, P -> Exp);
+    }
+
+    printf("%d %d", P -> Coef, P -> Exp);    //输出最后一个非零项（满足格式要求）
+    /*输出链表*/
+    
+    return 0;
+}
+/*主函数*/
