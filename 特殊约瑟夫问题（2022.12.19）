@@ -1,0 +1,63 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+
+/*结构体定义*/
+typedef struct NODE{
+    int num;
+    struct NODE* next;
+}Node, *PNode;
+/*结构体定义*/
+
+/*主函数*/
+int main(){
+    int N, M, K;
+    scanf("%d %d %d", &N, &M, &K);
+    
+    /*初始化循环链表*/
+    PNode circle;
+    PNode p = (PNode)malloc(sizeof(Node));
+    circle = p;
+    p -> num = 1;
+    p -> next = p;
+    PNode q = p;
+    for(int i = 1; i < N; ++i){
+        PNode r = (PNode)malloc(sizeof(Node));
+        r -> num = i + 1;
+        r -> next = p;
+        q -> next = r;
+        q = r;
+    }
+    /*初始化循环链表*/
+    
+    /*报数出列*/
+    p = circle;
+    q = p -> next;
+    int count = 0;
+    for(; p != q; ){
+        for(int i = 0; i < N - M - count; ++i){
+            p = p -> next;
+        }
+        if(N - M - count == -1){
+            p = p -> next;
+        }
+        q = p -> next;
+        printf("%d ", q -> num);
+        ++count;
+        p -> next = q -> next;
+        if(p != q){
+            for(int i = 0; i < K - 2; ++i){
+                p = p -> next;
+            }
+            q = p -> next;
+            printf("%d ", q -> num);
+            ++count;
+            p -> next = q -> next;
+            p = p -> next;
+        }
+    }
+    /*报数出列*/
+    
+    return 0;
+}
+/*主函数*/
