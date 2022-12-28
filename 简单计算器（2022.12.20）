@@ -1,40 +1,36 @@
 #include<bits/stdc++.h>
-#include<queue>
-#include<stack>
 using namespace std;
 
 int main(){
-    queue<int> Q;
-    stack<int> S;
-    int M, N, K;
-    scanf("%d %d %d", &M, &N, &K);
-    for(int i1 = 0; i1 < K; ++i1){
-        for(; !S.empty(); ){
-            S.pop();
+    int num, res;    //num为过程量，res为结果量
+    char op;    //op为运算符
+    scanf("%d", &num);
+    res = num;    //将初值赋给用于存储结果的res
+    for(; scanf("%c", &op) && op != '='; ){    //判断输入是否结束
+        scanf("%d", &num);
+        if(op == '+'){    //加法运算
+            res += num;
         }
-        for(; !Q.empty(); ){
-            Q.pop();
+        else if(op == '-'){    //减法运算
+            res -= num;
         }
-        for(int i2 = 0; i2 < N; ++i2){
-            int a;
-            scanf("%d", &a);
-            Q.push(a);
+        else if(op == '*'){    //乘法运算
+            res *= num;
         }
-        int num;
-        for(num = 0;  S.size() < M && num < N; ){
-            ++num;
-            S.push(num);
-            for(; S.size() && Q.size() && Q.front() == S.top(); ){
-                Q.pop();
-                S.pop();
+        else if(op == '/'){    //除法运算
+            if(!num){    //特殊情况，除数为零
+                printf("ERROR");
+                return 0;
+                exit(1);
             }
+            res /= num;
         }
-        if(num == N && S.empty()){
-            printf("YES\n");
-        }
-        else{
-            printf("NO\n");
+        else{    //特殊情况，非法运算符
+            printf("ERROR");
+            return 0;
+            exit(1);
         }
     }
+    printf("%d", res);
     return 0;
 }
