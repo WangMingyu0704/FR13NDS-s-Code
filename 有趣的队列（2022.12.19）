@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int num, res;    //num为过程量，res为结果量
+    char op;    //op为运算符
+    scanf("%d", &num);
+    res = num;    //将初值赋给用于存储结果的res
+    for(; scanf("%c", &op) && op != '='; ){    //判断输入是否结束
+        scanf("%d", &num);
+        if(op == '+'){    //加法运算
+            res += num;
+        }
+        else if(op == '-'){    //减法运算
+            res -= num;
+        }
+        else if(op == '*'){    //乘法运算
+            res *= num;
+        }
+        else if(op == '/'){    //除法运算
+            if(!num){    //特殊情况，除数为零
+                printf("ERROR");
+                return 0;
+                exit(1);
+            }
+            res /= num;
+        }
+        else{    //特殊情况，非法运算符
+            printf("ERROR");
+            return 0;
+            exit(1);
+        }
+    }
+    printf("%d", res);
+    return 0;
+}
