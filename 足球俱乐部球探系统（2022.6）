@@ -1,0 +1,263 @@
+    //足球俱乐部球探系统.β.2.0
+/* 头文件 */
+#include<iostream>    //输入输出流
+#include<conio.h>    //控制台输入输出
+#include<ctime>    //时间处理
+#include<cstring>    //字符串处理
+#include<algorithm>    //基础算法
+#include<fstream>    //文件流
+using namespace std;    //命名空间std
+/* 头文件 */
+
+/* 球员结构体定义 */
+typedef struct Player    //球员信息结构体定义
+{
+    char Name[50];    //球员姓名
+    char Position[5];    //球员位置
+    double Value;    //球员身价
+    double Inf1;    //球员信息1
+    double Inf2;    //球员信息2
+    double Inf3;    //球员信息3
+    double Age;    //球员年龄
+    double Ability;    //球员综合能力
+    double Ratio;    //球员性价比
+}player;    //重命名结构体
+/* 球员结构体定义 */
+
+/* 函数声明 */
+void Calculate(player *n);    //球员属性计算函数声明（By 王铭宇）
+void Read (player *p, char position);    //读取txt函数声明（By 武彦文）
+bool CompareOfSort1(player &x, player &y)；    //排序辅助函数声明（按综合实力降序）（By 尚川博）
+bool CompareOfSort0(player &x, player &y)；    //排序辅助函数声明（按性价比降序）（By 尚川博）
+void Sort(player a[], int b)；    //排序函数声明（By 尚川博）
+void Output(student a[], int n);    //输出函数声明（By 王铭宇）
+void Menu(void);    //用户交互函数声明（By 王铭宇）
+/* 函数声明 */
+
+/* 主程序 */
+int main()    //主程序运行
+{ 
+    menu();    //调用用户交互函数
+    return 0;    //程序结束
+}
+/* 主程序 */
+
+/* 球员属性计算函数 By 王铭宇 */
+void Calculate(player *n)    //计算操作函数定义(n为待计算球员结构体)
+{
+    double a = n.Inf1, b = n.Inf2, c = n.Inf3, d = n.Age;    //定义四个用于计算的参数a、b、c、d并赋值
+    double x, y;    //定义球员综合能力及球员性价比
+    switch(n.Position[0])    //根据球员位置确定球员综合能力计算公式
+    {
+        case 'S': x = b / a * 0.6 + c * 0.1 + d * 0.3; break;    //前锋计算公式：Goal / xG * 60% + Value * 10% + Age * 30%
+        case 'M': x = a * 0.3 + b * 0.3 + c * 0.1 + d * 0.3; break;    //中场计算公式：Threat * 30% + Drib * 30% + Value * 10% + Age * 30%
+        case 'D': x = a * 0.3 + b * 0.3 + c * 0.1 + d * 0.3; break;    //后卫计算公式：Tackler * 30% + Phy * 30% + Value * 10% + Age * 30%
+        case 'G': x = a * 0.3 + b * 0.3 + c * 0.3 + d * 0.1; break;    //门将计算公式：Save * 30% + Punch * 30% * Pass * 30% + Age * 10%
+        default:
+        {
+            return;    //若球员位置输入非法则结束函数（正常不会出现该种情况）
+        }
+    }
+    y = x * 10000 / n.Value;    //计算球员性价比(Ratio = Ability * 10000 / Value)
+    n.Ability = x;    //计算后为球员结构体综合能力赋值
+    n.Ratio = y;    //计算后为球员结构体性价比赋值
+}
+/* 球员属性计算函数 By 王铭宇 */
+
+/* 读取txt函数 By 武彦文 */
+void Read (player *p, char position)    //从txt文档中读取并计算后赋值函数定义，参数p为指向结构体的指针，用来操作球员结构体数组，参数position用来传递所需球员的位置
+{
+    FILE *fp;    //定义文件指针
+    fp = fopen("转会市场名单.txt", "r");    //将文件指针指向存有全部球员信息的txt文档
+    if (fp==NULL)    //未找到txt文档
+    {
+        printf("open error");    //报错语句
+        exit(1);    //打开文件失败，退出
+    }
+    int a;    //保存fscanf函数返回值
+    char name [50], b[5];    //保存读取的球员名字、位置信息
+    for (; (a = fscanf(fp, "%s %s", name, b)) != EOF && b == position; p++)    //遍历txt文档，在文档结束之前且位置符合用户所需位置时，进入循环读取数据并保存到结构体数组
+    {
+        strncopy(p->Name, name, 50);    //保存球员名字
+        strncopy(p->Position, b, 5);    //保存球员位置
+        fscanf(fp, "%lf %lf %lf %lf %lf", p->Value, p->Inf1, p->Inf2, p->Inf3, p->Age);    //读取并保存除球员名字以外的球员信息到结构体数组 
+        Calculate(p);    //调用计算函数，计算球员综合能力和性价比并为结构体赋值 
+    }
+    if (fclose(fp) !=0 )    //关闭文件
+    {
+        printf("close error");    //报错语句
+        exit (1);    //关闭文件失败，退出
+    }
+    return;    //程序结束
+}
+/* 读取txt函数 By 武彦文 */
+
+/* 排序函数 By 尚川博 */
+bool CompareOfSort1(player &x, player &y)    //两个参数为两球员结构体地址
+{
+    return x.Ability > y.Ability;    //若球员综合能力前者大于后者则返回1，反之则返回0
+}
+
+bool CompareOfSort0(player &x, player &y)    //两个参数为两球员结构体地址
+{
+    return x.Ratio > y.Ratio;    //若球员综合能力前者大于后者则返回1，反之则返回0
+}
+
+void Sort(player a[], int b)    //第一个参数为结构体数组首元素地址，第二个参数为代表选择排序类型的数值（1或0）
+{
+    int i = 0, m = 0;    //定义用于循环的变量i和用于记数差值的变量m
+    for(i = 0; a[i].Name != '\0'; i++);    //循环，直到球员结构体数组中最后一名球员
+    {
+        m = i;    //从i=0循环计算球员结构体数组中成员个数
+        switch(b)    //判断用户需要的排序方式
+        {
+            case 1:    //用户要求以球员综合实力作为排序基准
+            {
+                sort(a, a+m-1, CompareOfSort1);    //按从大到小顺序排列地址为a到a+m-1的元素，按综合实力排序后退出switch语句
+            } break;
+            case 0:    //用户要求以球员性价比作为排序基准
+            {
+                sort(a, a+m-1, CompareOfSort0);    //按从大到小顺序排列地址为a到a+m-1的元素，按性价比排序后退出switch语句
+            } break;
+            default:    //排序方式输入非法（正常不会出现该种情况）
+            {
+                return;//除b==1和b==0，其余情况直接结束
+            }
+        }
+    }
+}
+/* 排序函数 By 尚川博 */
+
+/* 输出函数 By 王铭宇 */
+void Output(student a[], int n)    //参数a为待输出球员结构体数组，参数n为用户需求的球员数量
+{
+    for(int i = 0; i < n; i++)    //循环用户需求的球员数量次
+    {
+        printf("%s\n", a[i].Name);    //输出第i个球员的姓名
+    }
+    return;    //结束程序
+}
+/* 输出函数 By 王铭宇 */
+
+/* 用户交互函数 By 王铭宇 */
+void Menu(void)
+{
+    player a[100];    //定义结构体数组，用来保存所求位置球员信息
+    for(; ; )    //用户选择结束程序之前循环运行
+    {
+        printf("感谢您使用足球俱乐部球探系统，请键入任意键以继续。\n");    //欢迎语句，要求用户键入任意键
+        getch();    //用户键入任意键
+        system("cls");    //清屏
+        printf("是否愿意透露贵俱乐部的名称以便于统计球员转会信息(匿名则默认为User)？（Y/N）\n");    //令用户选择实名或匿名
+        char club[50] = {"User"};    //定义并初始化俱乐部名称
+        char flag;    //定义用以判断用户选择的变量
+        scanf("%c", flag);    //用户选择实名或匿名
+        if(flag == 'Y')    //用户选择实名
+        {
+            printf("请输入贵俱乐部的名称:");    //令用户输入俱乐部名称
+            scanf("%s", club);    //用户输入俱乐部名称
+            printf("\n感谢您的配合！");    //感谢语句
+        }
+        system("cls");    //清屏
+        printf("请选择贵俱乐部所需要的球员个数及位置（n个前锋/中场/后卫/门将）。\n");    //令用户输入需求
+        int num;    //定义用户所需球员个数变量
+        char position[5];    //定义用户所需球员位置变量
+        scanf("%d个%s", num, position);    //用户输入需求
+        system("cls");    //清屏
+        printf("请选择符合贵俱乐部引援思路的优先级（综合能力/性价比）。\n");    //令用户输入排序基准
+        char datum[5];    //定义用户选择的排序基准变量（汉字）
+        int Datum;    //定义用户选择的排序基准变量（数字）
+        scanf("%s", datum);    //用户输入排序基准
+        system("cls");    //清屏
+        printf("加载中，请稍后。");    //加载语句
+        sleep(1000);    //间隔一秒
+        printf("·");    //加载过程1
+        sleep(1000);    //间隔一秒
+        printf("·");    //加载过程2
+        sleep(1000);    //间隔一秒
+        printf("·");    //加载过程3
+        sleep(1000);    //间隔一秒
+        printf("·");    //加载过程4
+        sleep(1000);    //间隔一秒
+        printf("·");    //加载过程5
+        system("cls");    //清屏
+        switch(datum[0])    //根据用户输入的排序基准给int型排序基准变量赋值
+        {
+            case '综':    //用户选择以综合能力作为排序基准
+            {
+                Datum = 1;    //将int型排序基准变量赋值为1
+            } break;
+            case '性':    //用户选择以性价比作为排序基准
+            {
+                Datum = 0;    //将int型排序基准变量赋值为0
+            } break;
+            default:    //用户非法输入
+            {
+                printf("非法输入，请重试。");    //报错语句
+                Datum = -1;    //将int型排序基准变量赋值为-1
+            }
+        }
+            switch(position)    //根据用户需要的球员类型选择输出相应数组中顺位靠前的用户所需数量个球员
+            {
+                case '前锋':    //用户所需球员位置为前锋
+                {
+                    Read(a, ST);    //从txt文档中读取所有前锋球员并写入球员结构体数组
+                    Sort(a, Datum);    //为前锋球员结构体数组按照用户需求排序
+                    Output(a, num);    //输出用户所需球员数个前锋球员
+                } break;
+            }
+        if(Datum != -1)    //用户合法输入
+        {
+            printf("符合贵俱乐部需求的球员有：\n");    //引导语句
+            switch(position)    //根据用户需要的球员类型选择输出相应数组中顺位靠前的用户所需数量个球员
+            {
+                case '前锋':    //用户所需球员位置为前锋
+                {
+                    Read(a, ST);    //从txt文档中读取所有前锋球员并写入球员结构体数组
+                    Sort(a, Datum);    //为前锋球员结构体数组按照用户需求排序
+                    Output(a, num);    //输出用户所需球员数个前锋球员
+                } break;
+                case '中场':    //用户所需球员位置为中场
+                {
+                    Read(a, MID);    //从txt文档中读取所有中场球员并写入球员结构体数组
+                    Sort(a, Datum);    //为中场球员结构体数组按照用户需求排序
+                    Output(a, num);    //输出用户所需球员数个中场球员
+                } break;
+                case '后卫':    //用户所需球员位置为后卫
+                {
+                    Read(a, DF);    //从txt文档中读取所有后卫球员并写入球员结构体数组
+                    Sort(a, Datum);    //为后卫球员结构体数组按照用户需求排序
+                    Output(a, num);    //输出用户所需球员数个后卫球员
+                } break;
+                case '门将':    //用户所需球员位置为门将
+                {
+                    Read(a, GK);    //从txt文档中读取所有门将球员并写入球员结构体数组
+                    Sort(a, Datum);    //为门将球员结构体数组按照用户需求排序
+                    Output(a, num);    //输出用户所需球员数个门将球员
+                } break;
+                default:
+                {
+                    printf("非法输入，请重试。");    //报错语句
+                }
+            }
+            printf("\n请键入任意键以继续。\n");    //要求用户键入任意键
+            getch();    //用户键入任意键
+            system("cls");    //清屏
+            printf("感谢使用，是否继续查询？(Y/N)\n");    //询问用户是否需要再次执行程序
+            scanf("%c", flag);    //用户输入是否需要再次执行程序
+            if(flag == 'N')    //用户不需要再次执行程序
+            {
+                printf("再次感谢使用，再见。");    //结束语句
+                return 0;    //结束程序
+            }
+            else if(flag != Y)    //用户非法输入
+            {
+                printf("非法输入，请重试。");    //报错语句
+            }
+        }
+    }
+    return 0;    //程序结束（正常不会经此结束程序）
+}
+/* 用户交互函数 By 王铭宇 */
+
+//By 王铭宇、武彦文、尚川博
