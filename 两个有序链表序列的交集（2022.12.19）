@@ -1,0 +1,77 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+
+/*结构体定义*/
+typedef struct NODE{
+    int Num;
+    struct NODE* next;
+} Node, *PNode;
+/*结构体定义*/
+
+/*主函数*/
+int main(){
+    /*写入链表*/
+    PNode S1, S2, p, q;    //定义链表以存储序列（S1、S2为链表头部，不移动）
+    S1 = (PNode)malloc(sizeof(Node));
+    S1 -> next = NULL;
+    S2 = (PNode)malloc(sizeof(Node));
+    S2 -> next = NULL;
+    int num;
+    p = S1;    //写入首行序列
+    for(; scanf("%d", &num) && num != -1; ){
+        PNode q = (PNode)malloc(sizeof(Node));
+        q -> Num = num;
+        q -> next = NULL;
+        p -> next = q;
+        p = q;
+    }
+    p = S2;    //写入次行序列
+    for(; scanf("%d", &num) && num != -1; ){
+        PNode q = (PNode)malloc(sizeof(Node));
+        q -> Num = num;
+        q -> next = NULL;
+        p -> next = q;
+        p = q;
+    }
+    p -> next = NULL;
+    /*写入链表*/
+    
+    /*链表取交集*/
+    PNode S3 = (PNode)malloc(sizeof(Node));    //定义链表以存储序列（S3为链表头部，不移动）
+    p = S1 -> next;
+    q = S2 -> next;
+    PNode r = S3;
+    for(; p && q; ){    //链表1、链表2均有剩余结点
+        if(p -> Num > q -> Num){    //链表1首项大于链表2首项
+            q = q -> next;
+        }
+        else if(p -> Num < q -> Num){    //链表1首项小于链表2首项
+            p = p -> next;
+        }
+        else{    //链表1首项等于链表2首项
+            r -> next = p;
+            p = p -> next;
+            r = r -> next;
+            q = q -> next;
+        }
+    }
+    r -> next = NULL;    //取交集结束
+    /*链表取交集*/
+    
+    /*输出链表*/
+    if(!S3 -> next){    //加和结果为空（特殊情况）
+        printf("NULL");
+        return 0;
+    }
+    PNode P = S3 -> next;
+    for(; P -> next; P = P -> next){    //输出除最后一个以外项
+        printf("%d ", P -> Num);
+    }
+    
+    printf("%d", P -> Num);    //输出最后一项（满足格式要求）
+    /*输出链表*/
+    
+    return 0;
+}
+/*主函数*/
