@@ -1,21 +1,40 @@
 #include<bits/stdc++.h>
-#include<string>
+#include<queue>
+#include<stack>
 using namespace std;
 
 int main(){
-    int n;
-    scanf("%d\n", &n);
-    for(int i = 0; i < n; ++i){
-        string DNA;
-        getline(cin, DNA);
-        int len = DNA.length();
-        DNA.append(DNA);
-        for(int j = 0; j < len; ++j){
-            for(int k = j; k < j + len; ++k){
-                printf("%c", DNA[k]);
-            }
-            printf(" ");
+    queue<int> Q;
+    stack<int> S;
+    int M, N, K;
+    scanf("%d %d %d", &M, &N, &K);
+    for(int i1 = 0; i1 < K; ++i1){
+        for(; !S.empty(); ){
+            S.pop();
         }
-        printf("\n");
+        for(; !Q.empty(); ){
+            Q.pop();
+        }
+        for(int i2 = 0; i2 < N; ++i2){
+            int a;
+            scanf("%d", &a);
+            Q.push(a);
+        }
+        int num;
+        for(num = 0;  S.size() < M && num < N; ){
+            ++num;
+            S.push(num);
+            for(; S.size() && Q.size() && Q.front() == S.top(); ){
+                Q.pop();
+                S.pop();
+            }
+        }
+        if(num == N && S.empty()){
+            printf("YES\n");
+        }
+        else{
+            printf("NO\n");
+        }
     }
+    return 0;
 }
