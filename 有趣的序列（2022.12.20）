@@ -1,0 +1,28 @@
+#include<iostream>
+#include<queue>
+using namespace std;
+
+int main(){
+    queue<int> A;
+    int n, m;
+    scanf("%d %d", &n, &m);
+    int op, num = 0;
+    for(int i = 0; i < m; ++i){
+        scanf("%d", &op);
+        if(!op){
+            A.push(++num);
+        }
+        else{
+            A.push(A.front());
+            A.pop();
+        }
+    }
+    int size = A.size();
+    for(int i = 1; i < size; ++i){
+        printf("%d ", A.front());
+        A.pop();
+    }
+    printf("%d", A.front());
+    A.pop();
+    return 0;
+}
