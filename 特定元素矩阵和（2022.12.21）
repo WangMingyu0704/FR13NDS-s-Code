@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+#include<string>
+using namespace std;
+
+int main(){
+    int n;
+    scanf("%d\n", &n);
+    for(int i = 0; i < n; ++i){    //循环n组
+        string virus, human;    //定义字符串用以存储病毒及患者DNA序列
+        getline(cin, virus, ' ');    //获取病毒DNA序列
+        getline(cin, human);    //获取患者DNA序列
+        int lenV = virus.length();    //病毒DNA序列长度
+        int lenH = human.length();    //患者DNA序列长度
+        virus.append(virus);    //病毒DNA序列类环状处理
+        int flag = 1;    //用以判断患者是否感染病毒
+        for(int j = 0; j < lenH - lenV + 1 && flag; ++j){    //取遍患者DNA序列中与病毒DNA序列长度相等的子串
+            string human_temp = human.substr(j, lenV);    //取患者DNA序列中与病毒DNA序列长度相等的一个子串
+            for(int k = 0; k < lenV && flag; ++k){    //取遍病毒环状DNA序列中的子串
+                string virus_temp = virus.substr(k, lenV);    //取病毒环状DNA序列中的一个子串
+                if(!virus_temp.compare(human_temp) && flag){    //在患者DNA序列中发现病毒DNA序列
+                    printf("YES\n");    //输出结果
+                    flag = 0;    //患者感染病毒
+                    break;    //结束本组检测
+                }
+            }
+        }
+        if(flag){    //患者未感染病毒
+            printf("NO\n");    //输出结果
+        }
+    }
+    return 0;
+}
