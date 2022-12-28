@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+#include<stack>
+using namespace std;
+
+/*二叉树结构体定义*/
+typedef struct BinTree{
+    char data;
+    struct BinTree* LChild;
+    struct BinTree* RChild;
+}BT;
+/*二叉树结构体定义*/
+
+/*建立二叉树函数*/
+BT* CreateBinTree(){
+    BT* root = (BT*)malloc(sizeof(BT));
+    char c;
+    scanf("%c", &c);
+    if(c == '#'){
+        root = NULL;
+        return root;
+    }
+    if(c == '\n'){
+        return root;
+    }
+    root -> data = c;
+    root -> LChild = CreateBinTree();
+    root -> RChild = CreateBinTree();
+    return root;
+}
+/*建立二叉树函数*/
+
+/*主函数*/
+int main(){
+    char target;
+    
+    /*建立二叉树*/
+    BT* tree = CreateBinTree();    //建立二叉树
+    /*建立二叉树*/
+    
+    /*查找目标数值并记录路径*/
+    scanf("%c", &target);    //接收目标数值
+    stack<BT*> path;    //定义临时栈，用以存储路径序列
+    path.push(tree);    //头结点入栈
+    for(; path.top() -> data != target; ){    //循环，直到找到目标数值
+        BT* temp = tree;    //定义临时结点用以入栈
+        //////////////////////////////////////////////////////////
+        if(temp -> LChild){    //当前结点有左孩子
+            path.push(temp -> LChild);    //当前结点的左孩子入栈
+            if(path.top() -> data != target && !path.top() -> LChild && !path.top() -> RChild){    //新入栈的结点数据不为目标数据且无左孩子和右孩子
+                path.pop();    //新入栈的结点出栈
+                path.top() -> LChild = NULL;    //去掉上一级入栈结点的左孩子
+            }
+        }
+        else if(temp -> RChild){    //当前结点有右孩子且无左孩子
+            path.push(temp -> RChild);    //当前结点的右孩子入栈
+            if(path.top() -> data != target && !path.top() -> LChild){    //新入栈的结点数据不为目标数据且无右孩子
+                path.pop();    //新入栈的结点出栈
+                path.top() -> RChild = NULL;    //去掉上一级入栈结点的右孩子
+            }
+        }
+        //////////////////////////////////////////////////////////
+    }
+    /*查找目标数值并记录路径*/
+    
+    /*输出路径*/
+    int size = path.size();    //路径长度
+    for(int i = 0; i < size; ++i){    //输出路径长度个结点数值
+        printf("%c", path.top() -> data);    //输出路径中每个结点数值
+        path.pop();    //输出后的结点出栈
+        if(!path.size()){    //非空栈
+            printf(" ");    //格式化
+        }
+    }
+    /*输出路径*/
+    
+    return 0;
+}
+/*主函数*/
